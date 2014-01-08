@@ -1,0 +1,113 @@
+<polymer-element name="ceci-audio-player" extends="ceci-element">
+  <template>
+    <link rel="stylesheet" href="component.css"></link>
+    <audio id="audio" controls></audio>
+    <shadow></shadow>
+    <script type="text/json" id="ceci-definition">
+      {
+        "tags": ["component-audio-player", "audio", "player"],
+        "thumbnail": "./thumbnail.png",
+        "broadcasts": {
+          "sourceChanged": {
+            "label": "Source Changed",
+            "description": "Occurs when the source is changed."
+          },
+          "play": {
+            "label": "Play",
+            "description": "Occurs when the audio starts playing."
+          },
+          "pause": {
+            "label": "Pause",
+            "description": "Occurs when the audio is paused."
+          },
+          "stop": {
+            "label": "Stop",
+            "description": "Occurs when the audio is stopped."
+          },
+          "seek": {
+            "label": "Seek",
+            "description": "Occurs when the audio is seeked."
+          }
+        },
+        "listeners": {
+          "play": {
+            "description": "Cause the Audio element to play.",
+            "label": "Play"
+          },
+          "pause": {
+            "description": "Cause the Audio element to pause playback.",
+            "label": "Pause"
+          },
+          "playOrPause": {
+            "description": "Cause the Audio element to toggle play/pause state.",
+            "label": "Play or Pause"
+          },
+          "stop": {
+            "description": "Cause the Audio element to stop playback.",
+            "label": "Stop"
+          },
+          "seek": {
+            "description": "Cause the Audio Element to seek to the given time (in seconds).",
+            "label": "Seek To Time (seconds)"
+          }
+        },
+        "attributes": {
+          "src": {
+            "description": "Change the audio src attribute.",
+            "label": "Set Source",
+            "editable": "string",
+            "listener": true
+          },
+          "autoplay": {
+            "label": "Autoplay",
+            "description": "When set to true, player will start as soon as src is set.",
+            "editable": "boolean",
+            "listener": true
+          }
+        }
+      }
+    </script>
+  </template>
+  <script>
+    Polymer('ceci-audio-player', {
+      ready: function() {
+        this.super();
+      },
+      srcChanged: function(oldVal, newVal){
+        this.$.audio.src = newVal;
+        this.broadcast("sourceChanged", newVal);
+      },
+      play: function(value, channel){
+        this.$.audio.play();
+        this.broadcast("play", "play");
+      },
+      pause: function(value, channel){
+        this.$.audio.pause();
+        this.broadcast("pause", "pause");
+      },
+      playOrPause: function(value, channel){
+        if (this.$.audio.paused){
+          this.$.audio.play();
+          this.broadcast("play", "play");
+        } else {
+          this.$.audio.pause();
+          this.broadcast("pause", "pause");
+        }
+      },
+      stop: function(value, channel){
+        if (!this.$.audio.paused){
+          this.$.audio.pause();
+        }
+        this.$.audio.currentTime = 0;
+        this.broadcast("stop", "stop");
+      },
+      seek: function(value, channel){
+        value = +value;
+        if ( typeof value === "number" && value >= 0 && value <= this.$.audio.duration ) {
+          this.$.audio.currentTime = value;
+          this.broadcast("seek", value);
+        }
+      }
+    });
+  </script>
+</polymer-element>
