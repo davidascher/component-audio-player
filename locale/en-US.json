@@ -1,5 +1,5 @@
 {
-	"ceci-audio-player": "Button",
+	"ceci-audio-player": "Audio Player",
 	"ceci-audio-player/attributes/label": "Click Me",
 	"ceci-audio-player/attributes/label/label": "Label",
 	"ceci-audio-player/attributes/label/description": "Text shown on the button.",
